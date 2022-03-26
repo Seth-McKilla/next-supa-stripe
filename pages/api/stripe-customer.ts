@@ -24,16 +24,21 @@ export default async function handler(
 
   switch (req.method) {
     case "POST":
-      const customer = await stripe.customers.create({
-        email: req.body.record.email,
-      });
+      try {
+        const customer = await stripe.customers.create({
+          email: req.body.record.email,
+        });
 
-      await supabase
-        .from("profile")
-        .update({ stripe_customer: customer.id })
-        .eq("id", req.body.record.id);
+        await supabase
+          .from("profile")
+          .update({ stripe_customer: customer.id })
+          .eq("id", req.body.record.id);
 
-      return res.send({ message: `Stripe customer created: ${customer.id}` });
+        return res.json({ message: `Stripe customer created: ${customer.id}` });
+      } catch (error: any) {
+        console.error(error);
+        return res.status(500).json({ message: error.message });
+      }
 
     default:
       res.setHeader("Allow", ["POST"]);
