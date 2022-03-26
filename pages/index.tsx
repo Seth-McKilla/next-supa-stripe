@@ -5,6 +5,7 @@ import { supabase } from "../utils/supabase";
 import { Lesson } from "../types";
 
 export default function Home({ lessons }: { lessons: Lesson[] }) {
+  console.log(supabase.auth.user());
   return (
     <div className="w-full max-w-3xl mx-auto my-16 px-2">
       <Head>
