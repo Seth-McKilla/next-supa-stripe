@@ -7,8 +7,12 @@ export default function Logout() {
 
   useEffect(() => {
     (async () => {
-      await supabase.auth.signOut();
-      return push("/");
+      try {
+        await supabase.auth.signOut();
+        return push("/");
+      } catch (error: any) {
+        console.error(error);
+      }
     })();
   }, [push]);
 
